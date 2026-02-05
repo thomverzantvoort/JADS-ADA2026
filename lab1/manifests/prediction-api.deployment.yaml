@@ -16,7 +16,7 @@ spec:
         app: prediction-api
     spec:
       containers:
-      - image: us-central1-docker.pkg.dev/YOUR_PROJECT_ID/labrepo/prediction-api:0.0.1 # Docker image name, that we pushed to GCR - use your project id, location, and repository
+      - image: us-central1-docker.pkg.dev/ada2026-486513/labrepo/prediction-api:0.0.1 # Docker image name, that we pushed to GCR - use your project id, location, and repository
         name: prediction-api
         imagePullPolicy: Always
         ports:
@@ -24,8 +24,8 @@ spec:
           protocol: TCP
         env:
         - name: PROJECT_ID
-          value: YOUR_PROJECT_ID  # use your project id
+          value: ada2026-486513  # use your project id
         - name: MODEL_REPO
-          value: adamodels # use your GCP bucket id
+          value: adamodels_2038050 # use your GCP bucket id
         - name: MODEL_NAME
           value: model.keras
