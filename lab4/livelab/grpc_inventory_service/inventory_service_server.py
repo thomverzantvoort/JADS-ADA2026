@@ -1,5 +1,5 @@
-from concurrent import futures
 import logging
+from concurrent import futures
 
 import grpc
 
@@ -30,7 +30,8 @@ class InventoryService(inventory_service_pb2_grpc.InventoryServiceServicer):
         for record in self.inventories:
             if ptype == record["name"]:
                 return inventory_service_pb2.Quantity(amount=record["amount"], metric=record["metric"])
-        return inventory_service_pb2.Quantity(amount=-1, metric="items")
+        return inventory_service_pb2.Quantity(amount=-1,
+                                              metric="items")  # here,  I am returning -1 to indicate no product type in the warehouse
 
     def GetStockSummary(self, request_iterator, context):
         # request is ProductType message
@@ -45,7 +46,7 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     inventory_service_pb2_grpc.add_InventoryServiceServicer_to_server(InventoryService(), server)
     logging.info('InventoryService Deployed')
-    server.add_insecure_port('[::]:5005') # HTTP transport
+    server.add_insecure_port('[::]:5005')  # HTTP transport
     server.start()
     logging.info('Server Started')
     server.wait_for_termination()

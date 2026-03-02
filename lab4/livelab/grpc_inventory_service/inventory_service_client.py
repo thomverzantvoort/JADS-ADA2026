@@ -10,6 +10,7 @@ import inventory_service_pb2_grpc
 def generate_product_list():
     yield inventory_service_pb2.ProductType(type="Laptop")
     yield inventory_service_pb2.ProductType(type="Phone")
+    # yield inventory_service_pb2.ProductType(type="DVD")
 
 
 def run():
@@ -24,6 +25,7 @@ def run():
     response = stub.GetStockSummary(product_list)
     logging.info("Quantity for Product Type Laptop : " + str(response.productStocks["Laptop"].amount))
     logging.info("Quantity for Product Type Phone : " + str(response.productStocks["Phone"].amount))
+    # logging.info("Quantity for Product Type DVD : " + str(response.productStocks["DVD"].amount))
 
 
 if __name__ == '__main__':
