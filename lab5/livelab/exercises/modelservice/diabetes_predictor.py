@@ -20,8 +20,8 @@ class DiabetesPredictor:
         client = storage.Client(project=req_data['project_id'])
         bucket = client.get_bucket(req_data['bucket_name'])
         blob = bucket.blob(req_data['model_file'])
-        blob.download_to_filename('model.h5')
-        self.model = load_model('model.h5')
+        blob.download_to_filename('model.keras')
+        self.model = load_model('model.keras')
         return jsonify({'message': "The diabetes predictor was updated"}), 200
 
     def predict(self, request):
