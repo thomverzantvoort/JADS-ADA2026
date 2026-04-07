@@ -1,0 +1,50 @@
+{
+  "$schema": "https://www.krakend.io/schema/v2.13/krakend.json",
+  "version": 3,
+  "output_encoding": "json",
+  "name": "InventoryOrderAggregate",
+  "port": 8081,
+  "endpoints": [
+    {
+      "endpoint": "/inventory/mcp",
+      "output_encoding": "no-op",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/mcp",
+          "host": [
+            "https://inventorymcpserver:5001"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/inventory/mcp",
+      "output_encoding": "no-op",
+      "method": "GET",
+      "@comment": "The high timeout avoids repeating connections on SSE",
+      "timeout": "5m",
+      "backend": [
+        {
+          "url_pattern": "/mcp",
+          "host": [
+            "https://inventorymcpserver:5001"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/inventory/mcp",
+      "output_encoding": "no-op",
+      "method": "DELETE",
+      "backend": [
+        {
+          "url_pattern": "/mcp",
+          "host": [
+            "https://inventorymcpserver:5001"
+          ]
+        }
+      ]
+    }
+  ]
+}
