@@ -8,7 +8,19 @@
     {
       "endpoint": "/inventory/mcp",
       "output_encoding": "no-op",
+      "input_headers": [
+        "*"
+      ],
       "method": "POST",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "every": "5m",
+          "client_max_rate": 20,
+          "client_capacity": 20,
+          "strategy": "ip"
+        }
+      },
       "backend": [
         {
           "url_pattern": "/mcp",
@@ -21,6 +33,9 @@
     {
       "endpoint": "/inventory/mcp",
       "output_encoding": "no-op",
+      "input_headers": [
+        "*"
+      ],
       "method": "GET",
       "@comment": "The high timeout avoids repeating connections on SSE",
       "timeout": "5m",
@@ -36,6 +51,9 @@
     {
       "endpoint": "/inventory/mcp",
       "output_encoding": "no-op",
+      "input_headers": [
+        "*"
+      ],
       "method": "DELETE",
       "backend": [
         {
