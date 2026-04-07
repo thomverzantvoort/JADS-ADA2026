@@ -1,12 +1,52 @@
-from google.adk.agents import SequentialAgent
+from google.adk.agents import SequentialAgent, LlmAgent, LoopAgent
+from google.adk.tools import exit_loop
+from google.cloud.aiplatform.metadata.schema.system.context_schema import Pipeline
 
-from seq_agent.seq_exe_agent import agent2
-from seq_agent.text_to_sql_agent import agent1
+from seq_agent.seq_exe_agent import biquery_executor_agent
+from seq_agent.table_info_agent import table_info_agent
+from seq_agent.text_to_sql_agent import text_to_sql_agent1
+from seq_agent.text_to_sql_agent_v2 import text_to_sql_agent2
 
-# Orchestrate the Pipeline
+# ********** Sequential Pipeline Example **********
+# Orchestrate the Sequential Pipeline
 seq_agent = SequentialAgent(
-    name="BiqQueryPipelineAgent",
-    sub_agents=[agent1, agent2]
+    name="BiqQueryPipeline",
+    sub_agents=[text_to_sql_agent1, biquery_executor_agent]
 )
 
 root_agent = seq_agent
+
+# ********** Sequential Pipeline with Critic Example **********
+
+# The Critic
+# bigquery_sql_critic = LlmAgent(
+#     name="BiQuery_SQL_Critic",
+#     instruction="""
+#                 You are a bigquery query expert. Your task is to check if {sql_query} is valid bigquery SQL.
+#                 **Task:**
+#                 Use the table information in {table_schema} to verify that the SQL query includes valid fields.
+#                 IF correct:
+#                 You MUST output 'PASS' and call the 'exit_loop' function.
+#                 ELSE (the critique contains actionable feedback):
+#                 Output error details.
+#                 """,
+#     tools=[exit_loop],
+#     output_key="feedback"
+# )
+#
+# correction_loop = LoopAgent(
+#     name="SQLValidationLoop",
+#     # Agent order is crucial
+#     sub_agents=[
+#         text_to_sql_agent2, table_info_agent,
+#         bigquery_sql_critic,
+#     ],
+#     max_iterations=2  # Limit loops
+# )
+#
+# seq_agent2 = SequentialAgent(
+#     name="BiqQueryPipelineWithCritic",
+#     sub_agents=[correction_loop, biquery_executor_agent]
+# )
+#
+# root_agent = seq_agent2

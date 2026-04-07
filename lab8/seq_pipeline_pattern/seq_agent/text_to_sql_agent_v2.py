@@ -6,31 +6,13 @@ from google.adk.tools.mcp_tool import StreamableHTTPConnectionParams, McpToolset
 from google.genai import types
 
 load_dotenv()
-tools = McpToolset(
-    connection_params=StreamableHTTPConnectionParams(
-        url="https://bigquery.googleapis.com/mcp",
-        headers={
-            "Authorization": "Bearer " + os.environ.get("GCP_ACCESS_TOKEN"),
-        },
-        timeout=600.0,
-    ),
-    tool_filter=[
-        "get_table_info",
-    ],
 
-)
-
-text_to_sql_agent1 = LlmAgent(
+text_to_sql_agent2 = LlmAgent(
     name="TextToSQL_Agent",
     model="gemini-2.5-flash-lite",
     description="Agent that generate SQL queries for natural language questions.",
     instruction="""You are a bigquery query expert who provides a valid Google SQL query for a user's question about the data in a table.
-                    When a user asks questions about the data in the table:
-                    1. Identify the table ID, the project ID, and the dataset ID from the user's query.
-                    2. Use the `get_table_info` tool to find the information about the table.
-                    3. Use the table information to generate a SQL query that answers the user's question.
-                    4. Return the generated SQL query to the user. Do not try to execute it.
-                    
+                   Return the generated SQL query to the user. Do not try to execute it. If you receive {feedback?}, fix the errors and generate again.                   
                     """,
     generate_content_config=types.GenerateContentConfig(
         temperature=0.2,  # More deterministic output
@@ -50,6 +32,5 @@ text_to_sql_agent1 = LlmAgent(
             timeout=120 * 1000,
         )
     ),
-    tools=[tools],
     output_key="sql_query"
 )

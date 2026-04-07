@@ -20,8 +20,8 @@ tools = McpToolset(
 
 )
 
-agent2 = LlmAgent(
-    name="BigQueryAgent",
+biquery_executor_agent = LlmAgent(
+    name="BigQuery_Executor_Agent",
     model="gemini-2.5-flash-lite",
     description="Agent that can run SQL queries on BigQuery.",
     instruction="Run the SQL query ${sql_query} and return the results",
