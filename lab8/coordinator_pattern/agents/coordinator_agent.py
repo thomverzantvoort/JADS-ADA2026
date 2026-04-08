@@ -22,7 +22,7 @@ coordinator_agent = LlmAgent(
 root_agent = coordinator_agent
 
 # ********** Pattern Fan-out ************************
-# Fan-out (The Swarm)
+# # Fan-out (The Swarm)
 # parallel_order_delivery = ParallelAgent(
 #     name="OrderAndDeliveryManager",
 #     sub_agents=[order_agent, inventory_agent, delivery_agent]

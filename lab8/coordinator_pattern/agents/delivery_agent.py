@@ -7,14 +7,26 @@ load_dotenv()
 tools = McpToolset(
     connection_params=StreamableHTTPConnectionParams(
         url="http://localhost:5000/mcp", timeout=600.0
-    )
+    ),
+    # Select only the tools neededs
+    tool_filter=[
+        "create_delivery"
+    ]
 )
 
 delivery_agent = LlmAgent(
     name="DeliveryAgent",
     model="gemini-2.5-flash-lite",
-    description="Agent that manage order deliveries. ",
-    instruction="You are an order delivery management expert specializing in creating, retrieving, updating, and deleting delivery records.",
+    description="Agent that can create order delivery records. ",
+    instruction="""
+        You manage order delivery records. Analyze the user intent.   
+        **Task:**
+        1. Analyze the user intent. 
+        2. If a user has asked to create or record an order delivery, use the 'create_delivery' tool to do so. Do not do "anything else"
+
+        **Output:**
+        Output *only* the result from the tool calls.
+        """,
     generate_content_config=types.GenerateContentConfig(
         temperature=0.2,  # More deterministic output
         max_output_tokens=1000,

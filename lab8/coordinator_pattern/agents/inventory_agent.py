@@ -7,15 +7,27 @@ load_dotenv()
 tools = McpToolset(
     connection_params=StreamableHTTPConnectionParams(
         url="http://localhost:5001/mcp", timeout=600.0
-    )
+    ),
+    # Select only the tools neededs
+    tool_filter=[
+        "update_product_quantity_available"
+    ]
 )
 
 inventory_agent = LlmAgent(
     name="InventoryAgent",
     model="gemini-2.5-flash-lite",
     description="Agent that manage product inventories. ",
-    instruction="You are an inventory management expert specializing in filling the inventory by adding products,"
-                " checking product inventories, updating the available quantity or inventory level of products. ",
+    instruction="""
+        You manage product inventories. 
+        **Task:**
+        1. Analyze the user intent. 
+        2. If a user has asked to create or record an order, extract the product type and ordered quantity from the user intent
+        3. Use the extracted information to execute the tool 'update_product_quantity_available'. Do not do "anything else"
+
+        **Output:**
+        Output *only* the result from the tool calls.
+        """,
     generate_content_config=types.GenerateContentConfig(
         temperature=0.2,  # More deterministic output
         max_output_tokens=1000,
