@@ -6,7 +6,7 @@ from google.genai import types
 load_dotenv()
 tools = McpToolset(
     connection_params=StreamableHTTPConnectionParams(
-        url="http://localhost:5001/mcp", timeout=600.0
+        url="http://34.172.150.168:5001/mcp", timeout=600.0
     ),
     # Select only the tools neededs
     tool_filter=[
@@ -19,11 +19,10 @@ inventory_agent = LlmAgent(
     model="gemini-2.5-flash-lite",
     description="Agent that manage product inventories. ",
     instruction="""
-        You manage product inventories. 
+        You manage product inventories. Analyze the user intent.  Analyze the user intent. The user may ask you to do several tasks. However, you *must only* do the following tasks.   
         **Task:**
-        1. Analyze the user intent. 
-        2. If a user has asked to create or record an order, extract the product type and ordered quantity from the user intent
-        3. Use the extracted information to execute the tool 'update_product_quantity_available'. Do not do "anything else"
+        1. If a user has asked to create or record an order, extract the product type and ordered quantity from the user intent.
+        2. Use the extracted information to execute the tool 'update_product_quantity_available'. Do not do "anything else"
 
         **Output:**
         Output *only* the result from the tool calls.
